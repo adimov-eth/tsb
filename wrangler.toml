@@ -5,8 +5,7 @@ compatibility_date = "2024-06-20"
 compatibility_flags = ["nodejs_compat"]
 
 kv_namespaces = [
-	{ binding = "TSTARS_SESSION", id = "6dc99669074b4e30b988ebfb3ad72515" },
-	{ binding = "TSTARS_LEADERS", id = "6f01b75b1b5a4c418350d952c5c27b1b" }
+	{ binding = "tstars_user_meta", id = "ac143a122346435a8485a596d7afab62" },
 ]
 
 [vars]

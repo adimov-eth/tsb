@@ -1,8 +1,7 @@
-import {Bot, Context, webhookCallback} from "grammy";
+import {Bot, Context, webhookCallback, InlineKeyboard} from "grammy";
 
 export interface Env {
-	TSTARS_SESSION: KVNamespace;
-	TSTARS_LEADERS: KVNamespace;
+	tstars_user_meta: KVNamespace;
 	BOT_INFO: string;
 	BOT_TOKEN: string;
 }
@@ -18,8 +17,7 @@ export default {
 			}
 
 			const userId = ctx.from.id.toString();
-
-			const existingData = await env.TSTARS_SESSION.get(userId);
+			const existingData = await env.tstars_user_meta.get(userId);
 			let userData = existingData ? JSON.parse(existingData) : {};
 
 			userData = {
@@ -32,16 +30,23 @@ export default {
 			if (photos.total_count > 0) {
 				const photo = photos.photos[0][0];
 				const fileId = photo.file_id;
-
 				const file = await bot.api.getFile(fileId);
 				const fileUrl = `https://api.telegram.org/file/bot${env.BOT_TOKEN}/${file.file_path}`;
-
 				userData.photo_url = fileUrl;
-
-				await ctx.reply(`Hello!`);
 			}
 
-			await env.TSTARS_SESSION.put(userId, JSON.stringify(userData));
+			await env.tstars_user_meta.put(userId, JSON.stringify(userData));
+
+			const keyboard = new InlineKeyboard().url("Open App", "https://example.com");
+
+			const message = await ctx.replyWithPhoto("https://wp-s.ru/wallpapers/9/19/508322161627456/foto-zelenoj-doliny-na-fone-golubogo-neba.jpg", {
+				caption: "Welcome to the app! Click the button below to open it.",
+				reply_markup: keyboard
+			});
+
+			if (ctx.chat && ctx.chat.id) {
+				await ctx.api.pinChatMessage(ctx.chat.id, message.message_id);
+			}
 		});
 
 		return webhookCallback(bot, "cloudflare-mod")(request);
