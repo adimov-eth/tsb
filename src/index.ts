@@ -1,4 +1,5 @@
 import {Bot, Context, webhookCallback, InlineKeyboard} from "grammy";
+import type {ParseModeFlavor} from "@grammyjs/parse-mode";
 
 export interface Env {
 	tstars_user_meta: KVNamespace;
@@ -8,7 +9,7 @@ export interface Env {
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		const bot = new Bot(env.BOT_TOKEN, {botInfo: JSON.parse(env.BOT_INFO)});
+		const bot = new Bot<ParseModeFlavor<Context>>(env.BOT_TOKEN, {botInfo: JSON.parse(env.BOT_INFO)});
 
 		bot.command("start", async (ctx: Context) => {
 			if (!ctx.from || !ctx.from.id) {
@@ -37,10 +38,17 @@ export default {
 
 			await env.tstars_user_meta.put(userId, JSON.stringify(userData));
 
-			const keyboard = new InlineKeyboard().url("Open App", "https://example.com");
+			const keyboard = new InlineKeyboard().url("Let's Go!", "https://t.me/TONStarsDAObot/app");
 
-			const message = await ctx.replyWithPhoto("https://wp-s.ru/wallpapers/9/19/508322161627456/foto-zelenoj-doliny-na-fone-golubogo-neba.jpg", {
-				caption: "Welcome to the app! Click the button below to open it.",
+			const message = await ctx.replyWithPhoto("https://bot-assets.fra1.cdn.digitaloceanspaces.com/messages/ton-stars.jpg", {
+				caption: `Welcome back, Space Cowboy! 🌠
+You're now at the helm of your own interstellar adventure in TON Stars DAO. Here’s what you can do:
+
+Tap to Collect Quarks: Start earning now by simply tapping!
+Evolve Quarks into Stars: Use your Quarks to unlock Stars, our premium token that offers more power within our community.
+Learn and Earn in a Risk-Free zone: Dive into the cosmos with zero investment. Educate yourself about the crypto, AI and earn rewards without any financial risk.
+
+Don't miss another opportunity to be part of something groundbreaking. Start your journey today and become a key player in shaping the future of our universe!`,
 				reply_markup: keyboard
 			});
 
