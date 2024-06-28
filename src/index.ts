@@ -37,7 +37,9 @@ export default {
 
 			await env.tstars_user_meta.put(userId, JSON.stringify(userData));
 
-			const keyboard = new InlineKeyboard().url("Let's Go!", "https://t.me/TONStarsDAObot/app");
+			const keyboard = new InlineKeyboard()
+				.url("Let's Go!", "https://t.me/TONStarsDAObot/app")
+				.url("Subscribe to Channel", "https://t.me/tonstarsdao");
 
 			const message = await ctx.replyWithPhoto("https://bot-assets.fra1.cdn.digitaloceanspaces.com/messages/ton-stars.jpg", {
 				caption: `Welcome back, Space Cowboy! 🌠
