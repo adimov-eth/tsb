@@ -62,6 +62,14 @@ Don't miss another opportunity to be part of something groundbreaking. Start you
 			}
 		});
 
+		bot.api.setMyCommands([
+			{
+				command: "start",
+				description: "Start"
+			}
+		]);
+
+
 		return webhookCallback(bot, "cloudflare-mod")(request);
 	},
 };
